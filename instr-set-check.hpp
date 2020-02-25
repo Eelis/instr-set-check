@@ -108,7 +108,7 @@ namespace instr_set_check
         }
     };
 
-    void report_missing(Checker const & checker)
+    inline void report_missing(Checker const & checker)
     {
         if (!checker.missing) return;
 
