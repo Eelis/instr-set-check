@@ -57,7 +57,7 @@ namespace instr_set_check
             { "BMI", 7, ebx, 3 },
         #endif
         #ifdef __BMI2__
-            { "BMI", 7, ebx, 8 },
+            { "BMI2", 7, ebx, 8 },
         #endif
         #ifdef __RTM__
             { "RTM", 7, ebx, 11 },
