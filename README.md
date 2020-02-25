@@ -41,3 +41,8 @@ If you want to run the checks at a different time, or want to report the error t
             // error printed to stderr and the program exited (if there were missing features),
             // or you can examine the bits in missing directly and construct your own message.
     }
+
+## Implementation
+
+For every extension that is enabled in the program (as indicated by compiler-predefined macros such as `__SSE3__`),
+the library checks the corresponding flag in [CPUID](https://en.wikipedia.org/wiki/CPUID).
