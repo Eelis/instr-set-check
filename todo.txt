@@ -1,0 +1,3 @@
+- See if there's something we can do to decrease the likelyhood that fancy instructions are generated for our functions.
+- Handle ABM, FMA, AVX2, XSAVES(?), PRFCHW, maybe more.
+- Support more OSs.
