@@ -4,7 +4,7 @@
 
 Programs often target specific extended instruction sets.
 
-Unfortunately, when a program is run on a machine that does /not/ support the instructions needed by the program,
+Unfortunately, when a program is run on a machine that does *not* support the instructions needed by the program,
 this problem is not detected until the program attempts to execute an unsupported instruction, at which point the program will crash.
 
 The purpose of this library is to instead detect and report the problem much earlier, during program startup, so that crashes in
