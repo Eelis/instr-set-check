@@ -19,6 +19,10 @@ All you need to do is:
 This will make the program check during startup to see if the machine supports the required instructions;
 and will print an error and exit the program if some required instructions are unsupported.
 
+An example error might look like:
+
+    error: This program requires the following extensions, which are not supported by this machine: SGX, CLFLUSHOPT
+
 ## Advanced usage
 
 If you want to run the checks at a different time, or want to report the error to the user in a different way, or want to generate a completely different error message, do:
