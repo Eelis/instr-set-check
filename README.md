@@ -32,14 +32,16 @@ If you want to run the checks at a different time, or want to report the error t
 
     int main()
     {
-        ...
-        uint64_t m = instr_set_check::get_missing();
-            // m contains 1 bit per feature element in the instr_set_check::needed array.
-            // the bit is set if the corresponding feature is not supported.
-            // if m==0, all needed features are supported.
-            // you can now either call instr_set_check::report_missing(missing) to have the
-            // error printed to stderr and the program exited (if there were missing features),
-            // or you can examine the bits in missing directly and construct your own message.
+        instr_set_check::missing_exts missing;
+            // constructing the object performs the checks
+
+        diagnose(missing);
+            // If there were any missing extensions, `diagnose` will:
+            //   1. report them to stderr, and
+            //   2. exit the program.
+            // Alternatively, you can query the `missing` object directly
+            // to enumerate missing extensions.
+            // See the implementation of `diagnose` for an example.
     }
 
 ## Implementation
