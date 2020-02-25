@@ -33,8 +33,11 @@ If you want to run the checks at a different time, or want to report the error t
     int main()
     {
         ...
-        instr_set_check::Checker checker; // constructing the object performs the checks
-
-        // you can now either call report_missing(checker) to have the error (if any) printed to stderr,
-        // or examine the bits in checker.missing, which contains 1 bit per Feature element in the instr_set_check::needed array.
+        uint64_t m = instr_set_check::get_missing();
+            // m contains 1 bit per feature element in the instr_set_check::needed array.
+            // the bit is set if the corresponding feature is not supported.
+            // if m==0, all needed features are supported.
+            // you can now either call instr_set_check::report_missing(missing) to have the
+            // error printed to stderr and the program exited (if there were missing features),
+            // or you can examine the bits in missing directly and construct your own message.
     }

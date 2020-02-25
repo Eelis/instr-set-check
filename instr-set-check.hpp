@@ -73,51 +73,51 @@ namespace instr_set_check
         #endif
     };
 
-    struct Checker
+    static_assert(std::size(needed) <= 64);
+
+    inline uint64_t get_missing()
     {
         uint64_t missing = 0; // one bit per feature listed in 'needed'
-        static_assert(std::size(needed) <= 64);
 
-        Checker()
+        uint32_t a[4];
+        __get_cpuid(0, &a[eax], &a[ebx], &a[ecx], &a[edx]);
+
+        uint32_t const max_leaf = a[eax];
+        uint32_t current_leaf = 0;
+
+        for (int idx = 0; idx != std::size(needed); ++idx)
         {
-            uint32_t a[4];
-            __get_cpuid(0, &a[eax], &a[ebx], &a[ecx], &a[edx]);
+            Feature const & feature = needed[idx];
 
-            uint32_t const max_leaf = a[eax];
-            uint32_t current_leaf = 0;
-
-            for (int idx = 0; idx != std::size(needed); ++idx)
+            if (feature.leaf != current_leaf)
             {
-                Feature const & feature = needed[idx];
-
-                if (feature.leaf != current_leaf)
+                if (feature.leaf > max_leaf)
                 {
-                    if (feature.leaf > max_leaf)
-                    {
-                        missing |= (1 << idx);
-                        continue;
-                    }
-
-                    __get_cpuid_count(feature.leaf, 0, &a[eax], &a[ebx], &a[ecx], &a[edx]);
-                    current_leaf = feature.leaf;
+                    missing |= (1 << idx);
+                    continue;
                 }
 
-                if (!(a[feature.reg] & (1 << feature.bit)))
-                    missing |= (1 << idx);
+                __get_cpuid_count(feature.leaf, 0, &a[eax], &a[ebx], &a[ecx], &a[edx]);
+                current_leaf = feature.leaf;
             }
-        }
-    };
 
-    inline void report_missing(Checker const & checker)
+            if (!(a[feature.reg] & (1 << feature.bit)))
+                missing |= (1 << idx);
+        }
+
+        return missing;
+    }
+
+    inline void report_missing(uint64_t missing)
     {
-        if (!checker.missing) return;
+        if (!missing) return;
 
         std::fprintf(stderr,
             "error: This program requires the following extensions, "
             "which are not supported by this machine: ");
         char const * fmt = "%s";
         for (int idx = 0; idx != std::size(needed); ++idx)
-            if (checker.missing & (1 << idx))
+            if (missing & (1 << idx))
             {
                 std::fprintf(stderr, fmt, needed[idx].name);
                 fmt = ", %s";
@@ -130,7 +130,7 @@ namespace instr_set_check
     #ifndef MANUALLY_INVOKED_INSTRUCTION_SET_CHECK
     namespace detail
     {
-        inline int dummy = (report_missing(Checker()), 0);
+        inline int dummy = (report_missing(get_missing()), 0);
     }
     #endif
 }
