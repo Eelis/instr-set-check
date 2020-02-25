@@ -1,3 +1,6 @@
+#ifndef INSTR_SET_CHECK_HPP
+#define INSTR_SET_CHECK_HPP
+
 #include <cpuid.h>
 #include <cstdint>
 #include <cstdlib>
@@ -133,3 +136,5 @@ namespace instr_set_check
     }
     #endif
 }
+
+#endif
