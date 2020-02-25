@@ -86,8 +86,6 @@ namespace instr_set_check
             uint32_t const max_leaf = a[eax];
             uint32_t current_leaf = 0;
 
-            auto mark_missing = [&](int idx){ missing |= (1 << idx); };
-
             for (int idx = 0; idx != std::size(needed); ++idx)
             {
                 Feature const & feature = needed[idx];
@@ -96,7 +94,7 @@ namespace instr_set_check
                 {
                     if (feature.leaf > max_leaf)
                     {
-                        mark_missing(idx);
+                        missing |= (1 << idx);
                         continue;
                     }
 
@@ -105,7 +103,7 @@ namespace instr_set_check
                 }
 
                 if (!(a[feature.reg] & (1 << feature.bit)))
-                    mark_missing(idx);
+                    missing |= (1 << idx);
             }
         }
 
