@@ -106,31 +106,31 @@ namespace instr_set_check
                     missing |= (1 << idx);
             }
         }
-
-        void report_missing()
-        {
-            if (!missing) return;
-
-            std::fprintf(stderr,
-                "error: This program requires the following extensions, "
-                "which are not supported by this machine: ");
-            char const * fmt = "%s";
-            for (int idx = 0; idx != std::size(needed); ++idx)
-                if (missing & (1 << idx))
-                {
-                    std::fprintf(stderr, fmt, needed[idx].name);
-                    fmt = ", %s";
-                }
-            std::fprintf(stderr, "\n");
-
-            std::exit(1);
-        }
     };
+
+    void report_missing(Checker const & checker)
+    {
+        if (!checker.missing) return;
+
+        std::fprintf(stderr,
+            "error: This program requires the following extensions, "
+            "which are not supported by this machine: ");
+        char const * fmt = "%s";
+        for (int idx = 0; idx != std::size(needed); ++idx)
+            if (checker.missing & (1 << idx))
+            {
+                std::fprintf(stderr, fmt, needed[idx].name);
+                fmt = ", %s";
+            }
+        std::fprintf(stderr, "\n");
+
+        std::exit(1);
+    }
 
     #ifndef MANUALLY_INVOKED_INSTRUCTION_SET_CHECK
     namespace detail
     {
-        inline int dummy = (Checker().report_missing(), 0);
+        inline int dummy = (report_missing(Checker()), 0);
     }
     #endif
 }

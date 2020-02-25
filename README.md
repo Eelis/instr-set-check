@@ -35,6 +35,6 @@ If you want to run the checks at a different time, or want to report the error t
         ...
         instr_set_check::Checker checker; // constructing the object performs the checks
 
-        // you can now either call checker.report_missing() to have the error (if any) printed to stderr,
+        // you can now either call report_missing(checker) to have the error (if any) printed to stderr,
         // or examine the bits in checker.missing, which contains 1 bit per Feature element in the instr_set_check::needed array.
     }
